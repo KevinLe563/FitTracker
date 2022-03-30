@@ -24,11 +24,19 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('weightlog/', include('weightlog.urls'))
+    path('weightlog/', include('weightlog.urls')),
 ]
 
 urlpatterns += [
-    path('', RedirectView.as_view(url='catalog/', permanent=True)),
+    path('', RedirectView.as_view(url='weightlog/', permanent=True)),
+]
+
+# Authentication urls
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
+urlpatterns += [
+    path('accounts/', include('accounts.urls')),
 ]
 
 urlpatterns += static(
