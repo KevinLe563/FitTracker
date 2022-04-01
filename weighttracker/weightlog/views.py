@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from weightlog.models import Weight
 
@@ -17,3 +19,11 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+class WeightListView(generic.ListView):
+    model = Weight
+    paginate_by = 10
+
+class WeightDetailView(generic.DetailView):
+    model = Weight
+    template_name = 'weightlog/weight_detail.html'

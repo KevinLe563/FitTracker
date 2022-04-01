@@ -26,6 +26,11 @@
                         <li>
                             <a href="{% url 'index' %}">Profile Page</a>
                         </li>
+                        <li>
+                            <a href="{% url 'logout' %}?next={{request.path}}">
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                     {% endblock %}
                 </div>

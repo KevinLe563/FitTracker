@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+<!--TODO-->
+
+{% block content %}
+    <h1>
+        Weight Log
+    </h1>
+    {% if user_weights %}
+        <ul>
+            {% for weight in user_weights %}
+            <li>
+                <a href="{% url 'weight-detail' weight.pk %}">
+                    {{weight.date}}
+                </a>
+            </li>
+        </ul>
+    {% else %}
+        <p>
+            You have not logged any weights.
+        </p>
+    {% endif %}
+{% endblock %}
+        
