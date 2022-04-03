@@ -74,7 +74,8 @@ class WeightCreate(LoginRequiredMixin, CreateView):
 
 class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight
-    fields = '__all__'
+    template_name_suffix = "_update_form"
+    fields = ['note', 'kg']
     
 class WeightDelete(LoginRequiredMixin, DeleteView):
     model = Weight

@@ -9,7 +9,13 @@
             {% for weight in weight_list %}
             <li>
                 <a href="{% url 'weight-detail' weight.pk %}">
-                    {{weight.date}}
+                    {{weight.date}} 
+                </a>
+                <a href="{% url 'weight-update' weight.pk %}">
+                    Update 
+                </a>
+                <a href="{% url 'weight-delete' weight.pk %}">
+                    Delete 
                 </a>
             </li>
             {% endfor %}
