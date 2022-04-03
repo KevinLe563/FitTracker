@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+<h1>
+    Remove logged weight for {{weight.date}}?
+</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+</form>
+
+{% endblock %}

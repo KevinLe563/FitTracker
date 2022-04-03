@@ -4,6 +4,13 @@ from weightlog import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('weight/', views.WeightListView.as_view(), name='weight-list'),
+    path('weights/', views.WeightListView.as_view(), name='weights'),
     path('weight/<int:pk>', views.WeightDetailView.as_view(), name='weight-detail'),
+]
+
+# urls for weight forms
+urlpatterns += [
+    path('weight/create/', views.WeightCreate.as_view(), name='weight-create'),
+    path('weight/<int:pk>/update/', views.WeightUpdate.as_view(), name='weight-update'),
+    path('weight/<int:pk>/delete/', views.WeightDelete.as_view(), name='weight-delete'),
 ]

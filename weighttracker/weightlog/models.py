@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 from django.contrib.auth.models import User
 
@@ -6,10 +7,12 @@ from django.contrib.auth.models import User
 
 class Weight(models.Model):
     # Each weight is associated with a user
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, null=True, blank=False)
     date = models.DateField(null=False, blank=False)
-    note = models.TextField(max_length=500, help_text="Personal notes")
+    note = models.TextField(max_length=500, help_text="Personal notes", null=True, blank=True)
+    kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=False)
 
     def __str__(self):
         """Represent weight object as a date"""
         return self.date
+        

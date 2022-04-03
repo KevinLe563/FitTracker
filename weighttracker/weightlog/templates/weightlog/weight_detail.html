@@ -1,23 +1,19 @@
 {% extends "base_generic.html" %}
-<!--TODO-->
 
 {% block content %}
-    <h1>
-        Weight Log
-    </h1>
-    {% if user_weights %}
-        <ul>
-            {% for weight in user_weights %}
-            <li>
-                <a href="{% url 'weight-detail' weight.pk %}">
-                    {{weight.date}}
-                </a>
-            </li>
-        </ul>
+    {% if weight %}
+    <h1>Date: {{ weight.0.date }}</h1>
+    <br>
+    <h2>
+        Weight: {{ weight.0.kg }} Kg
+    </h2>
+    <br>
+    <p>
+        Personal Notes: {{ weight.0.note }}
+    </p>
     {% else %}
-        <p>
-            You have not logged any weights.
-        </p>
+    <p>
+        This weight doesn't exist or it doesn't belong to you.
+    </p>
     {% endif %}
 {% endblock %}
-        
