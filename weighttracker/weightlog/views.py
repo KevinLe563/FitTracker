@@ -1,4 +1,6 @@
-from urllib import request
+import datetime
+import operator
+
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -16,9 +18,14 @@ def index(request):
     """View for home page of site"""
     my_user = request.user
     # filter so that it only gets a certain number (ie 5)
-    user_weights = Weight.objects.filter(user=request.user)
+    user_weights_week = Weight.objects.filter(user=request.user).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
+    mean = sum(weight.kg for weight in user_weights_week) / len(user_weights_week)
+    ordered = sorted(user_weights_week, key=operator.attrgetter('kg'))
+    medium = ordered[(len(user_weights_week) - 1) // 2].kg
     context = {
-        'user_weights': user_weights,
+        'week_mean': mean,
+        'week_medium': medium,
+        'user_weights': user_weights_week,
         'my_user': my_user,
     }
 
@@ -76,7 +83,21 @@ class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight
     template_name_suffix = "_update_form"
     fields = ['note', 'kg']
+
+    # Return back to weight list page
+    def get_success_url(self):
+        return reverse_lazy('weights')
+
+    def get_context_data(self,**kwargs):
+        context = super(WeightUpdate, self).get_context_data(**kwargs)
+        context['my_user']=self.request.user
+        return context
     
 class WeightDelete(LoginRequiredMixin, DeleteView):
     model = Weight
     success_url = reverse_lazy('weights')
+
+    def get_context_data(self,**kwargs):
+        context = super(WeightDelete, self).get_context_data(**kwargs)
+        context['my_user']=self.request.user
+        return context

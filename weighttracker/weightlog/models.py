@@ -12,7 +12,9 @@ class Weight(models.Model):
     note = models.TextField(max_length=500, help_text="Personal notes", null=True, blank=True)
     kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=False)
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         """Represent weight object as a date"""
         return self.date
-        
