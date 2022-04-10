@@ -20,5 +20,5 @@ urlpatterns += [
     # shows the actual chart
     path('chart/', views.lineChart.as_view(), name='chart'),
     # returns JSON data for the chart
-    path('api/chart/data/', views.ChartData.as_view(), name='api-data'),
+    path('api/chart/data/', views.chart_data, name='api-data'),
 ]

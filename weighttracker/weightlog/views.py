@@ -122,24 +122,26 @@ class lineChart(LoginRequiredMixin, generic.View):
     def get(self, request, *args, **kwargs):
         return render(request, 'linechart.html')
 
-# def chart_data(request, *args, **kwargs):
-#     data = {
-#         "sale": 100,
-#         "customers": 10,
-#     }
-#     return JsonResponse(data)
+def chart_data(request, *args, **kwargs):
+    user_weights_week = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
+    chart_weight_value = user_weights_week.values_list('kg', flat=True).order_by('date')
+    chart_weight_date = user_weights_week.values_list('date', flat=True).order_by('date')
+    data = {
+        "weight": list(chart_weight_value),
+        "date": list(chart_weight_date),
+    }
+    return JsonResponse(data)
 
-class ChartData(LoginRequiredMixin, APIView):
-    authentication_classes = []
-    permission_classes = []
-    def get(self, request, format=None):
-        # user_weights_week = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
-        # chart_weight_value = user_weights_week.values_list('kg', flat=True).order_by('-date')
-        # chart_weight_date = user_weights_week.values_list('date', flat=True).order_by('-date')
-        labels = ["Red", "blue"]
-        default_items = [5, 2]
-        data = {
-            "labels": labels,
-            "default": default_items,
-        }
-        return Response(data)
+
+# REST API
+# class ChartData(LoginRequiredMixin, APIView):
+#     authentication_classes = []
+#     permission_classes = []
+#     def get(self, request, format=None):
+#         labels = ["Red", "blue"]
+#         default_items = [5, 2]
+#         data = {
+#             "labels": labels,
+#             "default": default_items,
+#         }
+#         return Response(data)

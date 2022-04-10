@@ -1,4 +1,4 @@
-{% extends 'base_chart.html' %}
+{% extends 'base_generic.html' %}
 
 <script>
   {% block jquery %}
@@ -9,12 +9,10 @@
       method: "GET",
       url: endpoint,
       success: function(data){
-          labels = data.labels
-          defaultData = data.default
-          console.log(labels)
-          console.log(defaultData)
-          console.log(data.test)
-          console.log(data.key)
+          labels = data.date
+          defaultData = data.weight
+          console.log(data.weight)
+          console.log(data.date)
           setChart()
       },
       error: function(error_data){
@@ -31,7 +29,7 @@
           labels: labels,
           datasets: [
             {
-              label: "# of Votes",
+              label: "Weight Progression",
               data: defaultData,
               backgroundColor: [
                 "rgba(255, 99, 132, 0.2)",
@@ -67,13 +65,13 @@
 </script>
 
 {% block content %}
-
+<div class='container-sm'>
 <div class="row">
   <div class="col-sm-12" url-endpoint='{% url "api-data" %}'>
     <p>{{ my_user.first_name }} {{ my_user.last_name }}</p>
-    <a href="{% url 'weights' %}">My Log</a>
     <canvas id="myChart" width="400" height="400"></canvas>
   </div>
+</div>
 </div>
 
 {% endblock content %}
