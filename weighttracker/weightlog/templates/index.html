@@ -7,8 +7,13 @@
     <p>
         Weekly Weight Medium: {{ week_medium }}
     </p>
-    <a href="{% url 'chart' %}">
+    <a href="{% url 'chart' 7 %}">
         Weekly Progression Log 
     </a>
+    {% if today_weight %}
+        <p>Today's Weight: {{ today_weight.0.kg }}</p>
+    {% else %}
+        <p>You havn't logged your weight for today. <a href="{% url 'weight-create' %}">Log Now</a></p>
+    {% endif %}
 {% endblock %}
         

@@ -6,6 +6,7 @@
     {% endblock %}
     {% include 'base/css.html' %}
     {% include 'base/bootstrap_defaults.html' %}
+    {% include 'base/js/chart.html' %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <link
@@ -19,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   </head>
 
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
       window.addEventListener("scroll", function () {
         if (window.scrollY > 50) {
@@ -34,7 +35,7 @@
         }
       });
     });
-  </script>
+  </script> -->
 
   <body>
     <div>
@@ -42,7 +43,7 @@
         <div>
           {% block nav %}
 
-          <nav id="navbar_top" class="navbar navbar-expand-sm navbar-dark bg-dark">
+          <nav id="navbar_top" class="nav navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container-fluid">
                 <a href="{% url 'index' %}" class="navbar-brand">FitTracker</a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -59,9 +60,9 @@
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Charts</a>
                             <div class="dropdown-menu">
-                                <a href="{% url 'chart' %}" class="dropdown-item">Weekly</a>
-                                <a href="{% url 'chart' %}" class="dropdown-item">Monthly</a>
-                                <a href="{% url 'chart' %}" class="dropdown-item">Annually</a>
+                                <a href="{% url 'chart' 7 %}" class="dropdown-item">Weekly</a>
+                                <a href="{% url 'chart' 30 %}" class="dropdown-item">Monthly</a>
+                                <a href="{% url 'chart' 365 %}" class="dropdown-item">Annually</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="#"class="dropdown-item">Saved</a>
                             </div>
@@ -86,9 +87,9 @@
         <div>{% block content %}{% endblock %}</div>
         {% include 'base/js.html' %}
         <script>
-          $(document).ready(function(){
-            {% block jquery %}{% endblock %}
-          })
+            $(document).ready(function(){
+                {% block jquery %}{% endblock %}
+            })
         </script>
       </div>
     </div>

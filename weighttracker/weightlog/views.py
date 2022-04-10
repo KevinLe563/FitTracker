@@ -30,18 +30,22 @@ def index(request):
     my_user = request.user
     # filter so that it only gets a certain number (ie 5)
     user_weights_week = Weight.objects.filter(user=request.user).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
+    
     if user_weights_week:
-        mean = sum(weight.kg for weight in user_weights_week) / len(user_weights_week)
+        mean = round(sum(weight.kg for weight in user_weights_week) / len(user_weights_week), 2)
         ordered = sorted(user_weights_week, key=operator.attrgetter('kg'))
         medium = ordered[(len(user_weights_week) - 1) // 2].kg
     else:
         mean = 0
         medium = 0
+
+    today_weight = user_weights_week = Weight.objects.filter(user=request.user).filter(date=datetime.datetime.now())
     context = {
         'week_mean': mean,
         'week_medium': medium,
         'user_weights': user_weights_week,
         'my_user': my_user,
+        'today_weight': today_weight,
     }
 
     return render(request, 'index.html', context=context)
@@ -120,12 +124,20 @@ class WeightDelete(LoginRequiredMixin, DeleteView):
 class lineChart(LoginRequiredMixin, generic.View):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
-        return render(request, 'linechart.html')
+        # comma needed
+        pk_tuple = kwargs['pk'],
+        pk = pk_tuple[0]
+        context = {
+            "my_user": request.user,
+            "pk": pk,
+        }
+        return render(request, 'linechart.html', context=context)
 
 def chart_data(request, *args, **kwargs):
-    user_weights_week = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
-    chart_weight_value = user_weights_week.values_list('kg', flat=True).order_by('date')
-    chart_weight_date = user_weights_week.values_list('date', flat=True).order_by('date')
+    pk = kwargs['pk']
+    user_weights = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=pk)).date())
+    chart_weight_value = user_weights.values_list('kg', flat=True).order_by('date')
+    chart_weight_date = user_weights.values_list('date', flat=True).order_by('date')
     data = {
         "weight": list(chart_weight_value),
         "date": list(chart_weight_date),

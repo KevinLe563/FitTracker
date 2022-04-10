@@ -18,7 +18,7 @@ urlpatterns += [
 # urls for charts
 urlpatterns += [
     # shows the actual chart
-    path('chart/', views.lineChart.as_view(), name='chart'),
-    # returns JSON data for the chart
-    path('api/chart/data/', views.chart_data, name='api-data'),
+    path('chart/<int:pk>', views.lineChart.as_view(), name='chart'),
+    # returns JSON data for the chart -> pk = days back
+    path('api/chart/data/<int:pk>', views.chart_data, name='api-data'),
 ]
