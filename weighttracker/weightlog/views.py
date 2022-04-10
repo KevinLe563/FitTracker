@@ -1,17 +1,28 @@
 import datetime
 import operator
+import time
+import random
+from webbrowser import get
 
-from django.shortcuts import get_object_or_404, render, render_to_response
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from weightlog.models import Weight
 from weightlog.forms import WeightForm
 
 # Create your views here.
+
+User = get_user_model()
 
 @login_required
 def index(request):
@@ -105,3 +116,30 @@ class WeightDelete(LoginRequiredMixin, DeleteView):
         context = super(WeightDelete, self).get_context_data(**kwargs)
         context['my_user']=self.request.user
         return context
+
+class lineChart(LoginRequiredMixin, generic.View):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        return render(request, 'linechart.html')
+
+# def chart_data(request, *args, **kwargs):
+#     data = {
+#         "sale": 100,
+#         "customers": 10,
+#     }
+#     return JsonResponse(data)
+
+class ChartData(LoginRequiredMixin, APIView):
+    authentication_classes = []
+    permission_classes = []
+    def get(self, request, format=None):
+        # user_weights_week = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
+        # chart_weight_value = user_weights_week.values_list('kg', flat=True).order_by('-date')
+        # chart_weight_date = user_weights_week.values_list('date', flat=True).order_by('-date')
+        labels = ["Red", "blue"]
+        default_items = [5, 2]
+        data = {
+            "labels": labels,
+            "default": default_items,
+        }
+        return Response(data)

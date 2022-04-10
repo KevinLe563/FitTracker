@@ -14,3 +14,11 @@ urlpatterns += [
     path('weight/<int:pk>/update/', views.WeightUpdate.as_view(), name='weight-update'),
     path('weight/<int:pk>/delete/', views.WeightDelete.as_view(), name='weight-delete'),
 ]
+
+# urls for charts
+urlpatterns += [
+    # shows the actual chart
+    path('chart/', views.lineChart.as_view(), name='chart'),
+    # returns JSON data for the chart
+    path('api/chart/data/', views.ChartData.as_view(), name='api-data'),
+]
