@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 class SignUpForm(UserCreationForm):
+    username = forms.CharField(max_length=30)
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     email = forms.EmailField(max_length=254, required=True)

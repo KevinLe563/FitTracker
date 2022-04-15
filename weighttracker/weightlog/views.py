@@ -4,7 +4,8 @@ import time
 import random
 from webbrowser import get
 
-from django.http import JsonResponse
+from django import forms
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -18,7 +19,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from weightlog.models import Weight
-from weightlog.forms import WeightForm
+from weightlog.forms import WeightForm, ProfileForm
 
 # Create your views here.
 
@@ -73,6 +74,26 @@ class WeightDetailView(LoginRequiredMixin, generic.DetailView):
         context['weight'] = Weight.objects.filter(id=pk).filter(user=self.request.user)
         return context
 
+class UserProfileUpdate(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = "weightlog/edit_profile_form.html"
+    form_class = ProfileForm
+
+    # Return back to weight list page
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+    def get_context_data(self,**kwargs):
+        context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+        context['my_user']=self.request.user
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        if not self.request.user.is_superuser:
+            qs = qs.filter(pk=self.request.user.pk)
+        return qs
+
 class WeightCreate(LoginRequiredMixin, CreateView):
     model = Weight
     form_class = WeightForm
@@ -100,7 +121,7 @@ class WeightCreate(LoginRequiredMixin, CreateView):
 
 class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight
-    template_name_suffix = "_update_form"
+    template_name = "weightlog/weight_update_form.html"
     fields = ['note', 'kg']
 
     # Return back to weight list page
