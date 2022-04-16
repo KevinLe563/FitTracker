@@ -145,12 +145,37 @@ class WeightDelete(LoginRequiredMixin, DeleteView):
 class lineChart(LoginRequiredMixin, generic.View):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
+        my_user = request.user
         # comma needed
         pk_tuple = kwargs['pk'],
         pk = pk_tuple[0]
+
+        # data for table
+        weights = Weight.objects.filter(user=request.user)
+        if weights:
+            qs = Weight.objects.filter(user=request.user)[:7]
+            weights = Weight.objects.filter(id__in=qs)
+        
+        # personal stats
+        user_weights_week = weights.filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
+        if user_weights_week:
+            mean = round(sum(weight.kg for weight in user_weights_week) / len(user_weights_week), 2)
+            ordered = sorted(user_weights_week, key=operator.attrgetter('kg'))
+            median = ordered[(len(user_weights_week) - 1) // 2].kg
+        else:
+            mean = 0
+            median = 0
+
+        today_weight = Weight.objects.filter(user=request.user).filter(date=datetime.datetime.now())
+
         context = {
-            "my_user": request.user,
+            "my_user": my_user,
             "pk": pk,
+            "weights": weights,
+            'week_mean': mean,
+            'week_median': median,
+            'user_weights': user_weights_week,
+            'today_weight': today_weight,
         }
         return render(request, 'linechart.html', context=context)
 

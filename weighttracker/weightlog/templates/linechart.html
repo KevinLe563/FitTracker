@@ -66,11 +66,50 @@
   {% endblock %}
 </script>
 {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <table style="margin-top: 3em;" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="padding-top: 0px;" scope="col">#</th>
+            <th  style="padding-top: 0px;" scope="col">Date</th>
+            <th style="padding-top: 0px;" scope="col">Kg</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for weight in weights %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ weight.date }}</td>
+              <td>{{ weight.kg }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <div style="margin-top: 3em;" class="container shadow p-3 mb-5 bg-white rounded border border-dark">
+        <p>Weekly Weight Mean: {{ week_mean }}</p>
+        <p>Weekly Weight Median: {{ week_median }}</p>
+        {% if today_weight %}
+          <p style="margin-top: 3em;">Today's Weight: {{today_weight.0.kg}}</p>
+          <button onclick="location.href = '{% url 'weight-update' today_weight.0.pk %}';">Update</button>
+        {% else %}
+          <p style="margin-top: 3em;">
+            You havn't logged your weight for today.
+          </p>
+          <button onclick="location.href = '{% url 'weight-create' %}';">Log Now</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class='container-sm'>
 <div class="row">
-  <div class="col-sm-12" url-endpoint='{% url "api-data" 7 %}'>
-    <p>{{ my_user.first_name }} {{ my_user.last_name }}</p>
-    <canvas id="myChart" width="400" height="400"></canvas>
+  <div style="margin-bottom: 3em;" class="col-sm-12" url-endpoint='{% url "api-data" 7 %}'>
+    <canvas id="myChart" width="400" height="200"></canvas>
   </div>
 </div>
 </div>
