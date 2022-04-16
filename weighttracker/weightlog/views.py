@@ -103,7 +103,7 @@ class WeightCreate(LoginRequiredMixin, CreateView):
 class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight
     template_name = "weightlog/weight_update_form.html"
-    fields = ['note', 'kg']
+    fields = ['kg']
 
     # Return back to weight list page
     def get_success_url(self):

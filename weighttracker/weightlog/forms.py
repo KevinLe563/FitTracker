@@ -12,7 +12,7 @@ class WeightForm(forms.ModelForm):
     date = forms.DateField(initial=datetime.date.today())
     class Meta:
         model = Weight
-        fields = ['date', 'note', 'kg']
+        fields = ['date', 'kg']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)

@@ -9,7 +9,6 @@ class Weight(models.Model):
     # Each weight is associated with a user
     user = models.ForeignKey(User, on_delete=models.RESTRICT, null=True, blank=False)
     date = models.DateField(null=False, blank=False)
-    note = models.TextField(max_length=500, help_text="Personal notes", null=True, blank=True)
     kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=False)
 
     class Meta:
