@@ -1,19 +1,144 @@
-{% extends "base_generic.html" %}
+{% extends 'base_generic.html' %}
 
+
+<script>
+  {% block jquery %}
+    var endpoint = '/weightlog/api/chart/data/{{pk}}'
+    var defaultData = []
+    var labels = []
+    console.log(endpoint)
+    $.ajax({
+      method: "GET",
+      url: endpoint,
+      success: function(data){
+          labels = data.date
+          defaultData = data.weight
+          console.log(data.weight)
+          console.log(data.date)
+          setChart(labels, defaultData)
+      },
+      error: function(error_data){
+          console.log("error")
+          console.log(error_data)
+      }
+    })
+  
+
+  // function setChart(){
+  //     const ctx = document.getElementById("myChart").getContext("2d");
+  //     const myChart = new Chart(ctx, {
+  //       type: "line",
+  //       data: {
+  //         labels: labels,
+  //         datasets: [
+  //           {
+  //             label: "Weight Progression",
+  //             data: defaultData,
+  //             backgroundColor: [
+  //               "rgba(255, 99, 132, 0.2)",
+  //               "rgba(54, 162, 235, 0.2)",
+  //               "rgba(255, 206, 86, 0.2)",
+  //               "rgba(75, 192, 192, 0.2)",
+  //               "rgba(153, 102, 255, 0.2)",
+  //               "rgba(255, 159, 64, 0.2)",
+  //             ],
+  //             borderColor: [
+  //               "rgba(255, 99, 132, 1)",
+  //               "rgba(54, 162, 235, 1)",
+  //               "rgba(255, 206, 86, 1)",
+  //               "rgba(75, 192, 192, 1)",
+  //               "rgba(153, 102, 255, 1)",
+  //               "rgba(255, 159, 64, 1)",
+  //             ],
+  //             borderWidth: 1,
+  //           },
+  //         ],
+  //       },
+  //       options: {
+  //         scales: {
+  //           y: {
+  //             beginAtZero: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  // }
+  {% endblock %}
+</script>
 {% block content %}
-    <p>
-        Weekly Weight Mean: {{ week_mean }}
-    </p>
-    <p>
-        Weekly Weight Medium: {{ week_medium }}
-    </p>
-    <a href="{% url 'chart' 7 %}">
-        Weekly Progression Log 
-    </a>
-    {% if today_weight %}
-        <p>Today's Weight: {{ today_weight.0.kg }}</p>
-    {% else %}
-        <p>You havn't logged your weight for today. <a href="{% url 'weight-create' %}">Log Now</a></p>
-    {% endif %}
-{% endblock %}
-        
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <table style="margin-top: 3em;" class="table table-striped">
+        <thead>
+          <tr>
+            <th style="padding-top: 0px;" scope="col">#</th>
+            <th  style="padding-top: 0px;" scope="col">Date</th>
+            <th style="padding-top: 0px;" scope="col">Kg</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for weight in weights %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ weight.date }}</td>
+              <td>{{ weight.kg }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <div style="margin-top: 3em;" class="container shadow p-3 mb-5 bg-white rounded border border-dark">
+        <p>Weekly Weight Mean: {{ week_mean }}</p>
+        <p>Weekly Weight Median: {{ week_median }}</p>
+        {% if today_weight %}
+          <p style="margin-top: 3em;">Today's Weight: {{today_weight.0.kg}}</p>
+          <button onclick="location.href = '{% url 'weight-update' today_weight.0.pk %}';" class="btn btn-dark">Update</button>
+        {% else %}
+          <p style="margin-top: 3em;">
+            You havn't logged your weight for today.
+          </p>
+          <button onclick="location.href = '{% url 'weight-create' %}';" class="btn btn-dark">Log Now</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='container-sm'>
+<div class="row">
+  <div style="margin-bottom: 3em;" class="col-sm-12" url-endpoint='{% url "api-data" 7 %}'>
+    <canvas id="myChart" width="400" height="200"></canvas>
+  </div>
+</div>
+<div style="margin-bottom: 2em;" class="row">
+  <div class="col" >
+    <button onclick="location.href = '{% url 'chart' 7 %}';" class="btn btn-secondary w-100 h-100">
+      1 Week
+    </button>
+  </div>
+  <div class="col">
+    <button onclick="location.href = '{% url 'chart' 30 %}';" class="btn btn-secondary w-100 h-100">
+      1 Month
+    </button>
+  </div>
+  <div class="col">
+    <button onclick="location.href = '{% url 'chart' 180 %}';" class="btn btn-secondary w-100 h-100">
+      6 Months
+    </button>
+  </div>
+  <div class="col">
+    <button onclick="location.href = '{% url 'chart' 365 %}';" class="btn btn-secondary w-100 h-100">
+      1 Year
+    </button>
+  </div>
+  <div class="col">
+    <button onclick="location.href = '{% url 'chart' 0 %}';" class="btn btn-secondary w-100 h-100">
+      All Time
+    </button>
+  </div>
+</div>
+</div>
+
+{% endblock content %}

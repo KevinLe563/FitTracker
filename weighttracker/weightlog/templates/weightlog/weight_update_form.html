@@ -5,11 +5,17 @@
         {{ weight.date }}
     </h1>
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <table>
-            {{form.as_table}}
-        </table>
-        <input type="submit" value="Submit">
-    </form>
+    {% if weight.date == today_date %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                {{form.as_table}}
+            </table>
+            <input type="submit" value="Submit">
+        </form>
+    {% else %}
+        <p>
+            You can't edit the weight for this date.
+        </p>
+    {% endif %}    
 {% endblock %}

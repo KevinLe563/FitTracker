@@ -6,8 +6,8 @@ from webbrowser import get
 
 from django import forms
 from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
@@ -28,28 +28,9 @@ User = get_user_model()
 @login_required
 def index(request):
     """View for home page of site"""
-    my_user = request.user
-    # filter so that it only gets a certain number (ie 5)
-    user_weights_week = Weight.objects.filter(user=request.user).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=7)).date())
-    
-    if user_weights_week:
-        mean = round(sum(weight.kg for weight in user_weights_week) / len(user_weights_week), 2)
-        ordered = sorted(user_weights_week, key=operator.attrgetter('kg'))
-        medium = ordered[(len(user_weights_week) - 1) // 2].kg
-    else:
-        mean = 0
-        medium = 0
+    # homepage changed to chart page using redirect
 
-    today_weight = user_weights_week = Weight.objects.filter(user=request.user).filter(date=datetime.datetime.now())
-    context = {
-        'week_mean': mean,
-        'week_medium': medium,
-        'user_weights': user_weights_week,
-        'my_user': my_user,
-        'today_weight': today_weight,
-    }
-
-    return render(request, 'index.html', context=context)
+    return redirect(reverse('chart', kwargs={'pk':7}))
 
 class WeightListView(LoginRequiredMixin, generic.ListView):
     model = Weight
@@ -131,7 +112,11 @@ class WeightUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self,**kwargs):
         context = super(WeightUpdate, self).get_context_data(**kwargs)
         context['my_user']=self.request.user
+        context['today_date']=datetime.date.today()
         return context
+
+    def get_queryset(self, *args, **kwargs):
+        return Weight.objects.filter(user=self.request.user)
     
 class WeightDelete(LoginRequiredMixin, DeleteView):
     model = Weight
@@ -166,7 +151,7 @@ class lineChart(LoginRequiredMixin, generic.View):
             mean = 0
             median = 0
 
-        today_weight = Weight.objects.filter(user=request.user).filter(date=datetime.datetime.now())
+        today_weight = Weight.objects.filter(user=request.user).filter(date=datetime.date.today())
 
         context = {
             "my_user": my_user,
@@ -177,11 +162,15 @@ class lineChart(LoginRequiredMixin, generic.View):
             'user_weights': user_weights_week,
             'today_weight': today_weight,
         }
-        return render(request, 'linechart.html', context=context)
+        return render(request, 'index.html', context=context)
 
 def chart_data(request, *args, **kwargs):
     pk = kwargs['pk']
-    user_weights = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=pk)).date())
+    if pk <= 0:
+        # return all user weights if invalid number is passed
+        user_weights = Weight.objects.filter(user=request.user.id)
+    else:
+        user_weights = Weight.objects.filter(user=request.user.id).filter(date__gte=(datetime.datetime.now() - datetime.timedelta(days=pk)).date())
     chart_weight_value = user_weights.values_list('kg', flat=True).order_by('date')
     chart_weight_date = user_weights.values_list('date', flat=True).order_by('date')
     data = {
