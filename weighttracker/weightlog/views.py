@@ -44,21 +44,16 @@ class WeightListView(LoginRequiredMixin, generic.ListView):
         context['my_user']=self.request.user
         return context
 
-class WeightDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Weight
-    template_name = 'weightlog/weight_detail.html'
-
-    def get_context_data(self,**kwargs):
-        pk = self.kwargs['pk']
-        context = super(WeightDetailView, self).get_context_data(**kwargs)
-        context['my_user']=self.request.user
-        context['weight'] = Weight.objects.filter(id=pk).filter(user=self.request.user)
-        return context
-
 class UserProfileUpdate(LoginRequiredMixin, UpdateView):
     model = User
     template_name = "weightlog/edit_profile_form.html"
     form_class = ProfileForm
+
+    # pass user into form args
+    def get_form_kwargs(self):
+        kwargs = super(UserProfileUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     # Return back to weight list page
     def get_success_url(self):
@@ -99,6 +94,11 @@ class WeightCreate(LoginRequiredMixin, CreateView):
         context = super(WeightCreate, self).get_context_data(**kwargs)
         context['my_user']=self.request.user
         return context
+
+    def get(self, request, *args, **kwargs):
+        if Weight.objects.filter(user=self.request.user).filter(date=datetime.datetime.today()).exists():
+            return redirect('chart', pk=7)
+        return super().get(request, *args, **kwargs)
 
 class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight

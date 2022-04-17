@@ -14,7 +14,7 @@ class WeightForm(forms.ModelForm):
         fields = ['kg']
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop('user', None) 
         super(WeightForm, self).__init__(*args, **kwargs) 
 
     def clean_kg(self):
@@ -63,6 +63,10 @@ class ProfileForm(forms.ModelForm):
             'last_name',
             'email',
         ]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None) 
+        super(ProfileForm, self).__init__(*args, **kwargs) 
         
     def clean_username(self):
         fusername = self.cleaned_data['username']
@@ -71,7 +75,8 @@ class ProfileForm(forms.ModelForm):
         
         # Check if existing user has this username
         if user_with_username.exists():
-            raise ValidationError(_('Account with this username already exists. Please try a different username.'))
+            if user_with_username.first().username != self.user.username:
+                raise ValidationError(_('Account with this username already exists. Please try a different username.'))
         
         return fusername
 
@@ -82,6 +87,7 @@ class ProfileForm(forms.ModelForm):
         
         # Check if existing user has this email
         if user_with_email.exists():
-            raise ValidationError(_('Account with this email already exists. Please try a different email.'))
+            if user_with_email.first().email != self.user.email:
+                raise ValidationError(_('Account with this email already exists. Please try a different email.'))
         
         return femail

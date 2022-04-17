@@ -70,7 +70,6 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="{% url 'edit-profile' my_user.pk %}" class="dropdown-item">Edit Profile</a>
-                                <a href="#" class="dropdown-item">Configurations</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="{% url 'logout' %}?next={{request.path}}" class="dropdown-item">Logout</a>
                             </div>

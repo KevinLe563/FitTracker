@@ -5,7 +5,6 @@ from weightlog import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('weights/', views.WeightListView.as_view(), name='weights'),
-    path('weight/<int:pk>', views.WeightDetailView.as_view(), name='weight-detail'),
     path('edit/profile/<int:pk>', views.UserProfileUpdate.as_view(), name='edit-profile'),
 ]
 
