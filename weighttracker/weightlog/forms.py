@@ -9,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from weightlog.models import Weight
 
 class WeightForm(forms.ModelForm):
-    # date = forms.DateField(initial=datetime.date.today())
     class Meta:
         model = Weight
         fields = ['kg']
@@ -18,6 +17,12 @@ class WeightForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super(WeightForm, self).__init__(*args, **kwargs) 
 
+    def clean_kg(self):
+        data = self.cleaned_data['kg']
+        if data < 0:
+            raise ValidationError(_('Invalid weight -  This value must be positive!'))
+
+        return data
     # remove option for user to edit the weight, can only log weight for
     # current day
     # def clean_date(self):
@@ -33,6 +38,18 @@ class WeightForm(forms.ModelForm):
 
     #     return data
 
+class UpdateWeightForm(forms.ModelForm):
+    class Meta:
+        model = Weight
+        fields = ['kg']
+
+    def clean_kg(self):
+        data = self.cleaned_data['kg']
+        if data < 0:
+            raise ValidationError(_('Invalid weight -  This value must be positive!'))
+
+        return data
+        
 class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)

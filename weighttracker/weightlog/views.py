@@ -19,7 +19,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from weightlog.models import Weight
-from weightlog.forms import WeightForm, ProfileForm
+from weightlog.forms import WeightForm, ProfileForm, UpdateWeightForm
 
 # Create your views here.
 
@@ -93,7 +93,7 @@ class WeightCreate(LoginRequiredMixin, CreateView):
 
     # Return back to weight list page
     def get_success_url(self):
-        return reverse_lazy('weights')
+        return reverse_lazy('chart', kwargs={'pk': 7})
 
     def get_context_data(self,**kwargs):
         context = super(WeightCreate, self).get_context_data(**kwargs)
@@ -103,11 +103,11 @@ class WeightCreate(LoginRequiredMixin, CreateView):
 class WeightUpdate(LoginRequiredMixin, UpdateView):
     model = Weight
     template_name = "weightlog/weight_update_form.html"
-    fields = ['kg']
+    form_class = UpdateWeightForm
 
     # Return back to weight list page
     def get_success_url(self):
-        return reverse_lazy('weights')
+        return reverse_lazy('chart', kwargs={'pk': 7})
 
     def get_context_data(self,**kwargs):
         context = super(WeightUpdate, self).get_context_data(**kwargs)
