@@ -93,6 +93,7 @@ class WeightCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self,**kwargs):
         context = super(WeightCreate, self).get_context_data(**kwargs)
         context['my_user']=self.request.user
+        context['today_date']=datetime.date.today()
         return context
 
     def get(self, request, *args, **kwargs):

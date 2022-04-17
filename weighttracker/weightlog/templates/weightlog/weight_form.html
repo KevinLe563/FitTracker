@@ -1,11 +1,43 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        <table>
-            {{form.as_table}}
-        </table>
-        <input type="submit" value="Submit">
-    </form>
+    <div style="margin-top: 5%; border-radius: .7rem; max-width: 60%; max-height: 60%; min-width: 400px;" class="container justify-content-center shadow p-3 mb-5 bg-white border border-dark">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div style="margin: 7%; font-family: 'Inria Sans';">
+                <h1>
+                    <b><i>{{today_date|date:"F d\t\h Y"}}</i></b>
+                </h1>
+                <p style="margin-bottom: 10%; color: grey;">
+                    <i>Please input weight in Kg!</i>
+                </p>
+                <table>
+                    <tr>
+                        <th>Weight Today: </th>
+                        <td>
+                        {{ form.kg }} Kg
+                        </td>
+                    </tr>
+                </table>
+                {% if form.errors %}
+                    <div style="margin-bottom: 15%; margin-top: 10px;">
+                        <ul style="padding: 0px">
+                            {% for error in form.kg.errors %}
+                                <li style="list-style: none;" class="text-danger">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div style="margin-bottom: 20%">
+                    
+                    </div>
+                {% endif %}
+
+                <button style="background-color: #388DBC;" type="submit" class="btn"><b>Submit</b></button>
+                <p style="color: grey;">
+                    <i>Don't worry you'll be able to update this later!</i>
+                </p>
+            </div>
+            </form>
+    </div>    
 {% endblock %}
