@@ -2,49 +2,93 @@
 
 {% block content %}
 
-{% if form.errors %}
-    <p>
-        Invalid username or password. Please try again.
-    </p>
-{% endif %}
-
 {% if next %}
     {% if user.is_authenticated %}
         <p>
             Your account doesn't have access to this page.
         </p>
-    {% else %}
-        <p>
-            Please login to access this page.
-        </p>
     {% endif %}
 {% endif %}
-
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <td>
-                {{ form.username.label_tag }}
-            </td>
-            <td>
-                {{ form.username }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.password.label_tag }}
-            </td>
-            <td>
-                {{ form.password }}
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-    <p>Need an account? <a href="{% url 'signup' %}">Signup</a></p>
-</form>
+<div style="margin-top: 5%; border-radius: .7rem; max-width: 30%; max-height: 60%; min-width: 400px;" class="container justify-content-center shadow p-3 mb-5 bg-white border border-dark"> 
+    <div style="margin: 7%; font-family: 'Inria Sans';" class="">
+    <form action="" method="post">
+        {% csrf_token %}
+            <h1 class="text-center">
+                LOG IN TO BEGIN
+            </h1>
+            <div style="margin-top: 10%; margin-bottom: 5%;" class="row justify-content-center form-group">
+                <div class="col-sm-3">
+                    {{ form.username.label_tag }}
+                </div>
+                <div class="col-sm-9">
+                    {{ form.username }}
+                </div>
+            </div>
+            <div style="margin-bottom: 10%;" class="row justify-content-center">
+                <div class="col-sm-3">
+                    {{ form.password.label_tag }}
+                </div>
+                <div class="col-sm-9">
+                    {{ form.password }}
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 7%;">
+                <div class="col">
+                    <button style="background-color: #388DBC;" type="submit" class="btn float-end"><b>LOG IN</b></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6" style="color: grey;">
+                    <p><i>Don't have an account?</i></p>
+                </div>
+                <div class="col-6">
+                    <button style="background-color: #38B4BC;" type="submit" class="btn float-end"><b>SIGN UP HERE</b></button>
+                </div>
+            </div>
+                    <!-- <table class="table">
+                        <tr>
+                            <td>
+                                {{ form.username.label_tag }}
+                            </td>
+                            <td>
+                                <div style="width: 80%">
+                                    {{ form.username }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ form.password.label_tag }}
+                            </td>
+                            <td>
+                                {{ form.password }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td style="text-align: right;">
+                                <button style="background-color: #388DBC;" type="submit" class="btn"><b>LOG IN</b></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p style="color: grey;">
+                                    <i>Don't have an account?</i>
+                                </p>
+                            </td>
+                            <td style="text-align: right;">
+                                <a class="btn" href="{% url 'signup' %}">SIGN UP HERE</a>
+                            </td>
+                        </tr>
+                    </table> -->
+            {% if form.errors %}
+                <p>
+                    Invalid username or password. Please try again.
+                </p>
+            {% endif %}
+      </form>
+      </div>
+</div>
 
 {% endblock %}
