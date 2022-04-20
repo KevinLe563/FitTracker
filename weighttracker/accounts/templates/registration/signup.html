@@ -1,10 +1,86 @@
-{% extends "base_auth.html" %}
+{% extends "base_signup.html" %}
 
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-  </form>
+<div style="margin-top: 5%; border-radius: .7rem; max-width: 50%; max-height: 60%; min-width: 400px;" class="container justify-content-center shadow p-3 mb-5 bg-white border border-dark"> 
+  <div style="margin: 7%; font-family: 'Inria Sans';" class="">
+  <form action="" method="post">
+      {% csrf_token %}
+          <h1 class="text-center">
+              SIGN UP HERE
+          </h1>
+          <div style="margin-top: 5%; margin-bottom: 3%;" class="row justify-content-center form-group">
+              <div class="col-sm-4">
+                  {{ form.username.label_tag }}
+              </div>
+              <div class="col-sm-8">
+                  {{ form.username }}
+              </div>
+          </div>
+          <div style="margin-bottom: 3%;" class="row justify-content-center">
+            <div class="col-sm-4">
+                {{ form.first_name.label_tag }}
+            </div>
+            <div class="col-sm-8">
+                {{ form.first_name }}
+            </div>
+        </div>
+        <div style="margin-bottom: 3%;" class="row justify-content-center">
+          <div class="col-sm-4">
+              {{ form.last_name.label_tag }}
+          </div>
+          <div class="col-sm-8">
+              {{ form.last_name }}
+          </div>
+      </div>
+          <div style="margin-bottom: 3%;" class="row justify-content-center">
+            <div class="col-sm-4">
+                {{ form.email.label_tag }}
+            </div>
+            <div class="col-sm-8">
+                {{ form.email }}
+            </div>
+        </div>
+          <div style="margin-bottom: 3%;" class="row justify-content-center">
+              <div class="col-sm-4">
+                  {{ form.password1.label_tag }}
+              </div>
+              <div class="col-sm-8">
+                  {{ form.password1 }}
+              </div>
+          </div>
+          <div style="margin-bottom: 0%;" class="row justify-content-center">
+            <div class="col-sm-4">
+                {{ form.password2.label_tag }}
+            </div>
+            <div class="col-sm-8">
+                {{ form.password2 }}
+                <p>
+                  Enter the same password again for verification!
+                </p>
+            </div>
+        </div>
+          {% if form.username.errors %}
+              <p class="text-danger">
+                  This username is already taken. PLease try Again.
+              </p>
+          {% elif form.email.errors %}
+            <p class="text-danger">
+              This email is already taken. Please try Again.
+            </p>
+          {% elif form.password2.errors %}
+            <p class="text-danger">
+              The passwords don't match. Please try Again.
+            </p>
+          {% endif %}
+          <div class="row" style="margin-bottom: 7%; margin-right: 5%; margin-top: 8%;">
+            <div class="col-6" style="color: grey;">
+              <p><i>Already have an account? </i><a href="{% url 'login' %}">Login</a></p>
+          </div>  
+            <div class="col-6">
+                  <button style="padding-left: 15%; padding-right: 15%; background-color: #38B4BC;" type="submit" class="btn btn-block float-end"><b>SIGN UP</b></button>
+              </div>
+          </div>
+    </form>
+    </div>
+</div>
 {% endblock %}

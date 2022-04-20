@@ -32,62 +32,25 @@
                     {{ form.password }}
                 </div>
             </div>
+            {% if form.errors %}
+                <p class="text-danger">
+                    Invalid username or password. Please try again.
+                </p>
+            {% endif %}
             <div class="row" style="margin-bottom: 7%;">
                 <div class="col">
                     <button style="background-color: #388DBC;" type="submit" class="btn float-end"><b>LOG IN</b></button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6" style="color: grey;">
-                    <p><i>Don't have an account?</i></p>
-                </div>
-                <div class="col-6">
-                    <button style="background-color: #38B4BC;" type="submit" class="btn float-end"><b>SIGN UP HERE</b></button>
-                </div>
-            </div>
-                    <!-- <table class="table">
-                        <tr>
-                            <td>
-                                {{ form.username.label_tag }}
-                            </td>
-                            <td>
-                                <div style="width: 80%">
-                                    {{ form.username }}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ form.password.label_tag }}
-                            </td>
-                            <td>
-                                {{ form.password }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            </td>
-                            <td style="text-align: right;">
-                                <button style="background-color: #388DBC;" type="submit" class="btn"><b>LOG IN</b></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p style="color: grey;">
-                                    <i>Don't have an account?</i>
-                                </p>
-                            </td>
-                            <td style="text-align: right;">
-                                <a class="btn" href="{% url 'signup' %}">SIGN UP HERE</a>
-                            </td>
-                        </tr>
-                    </table> -->
-            {% if form.errors %}
-                <p>
-                    Invalid username or password. Please try again.
-                </p>
-            {% endif %}
       </form>
+      <div class="row">
+        <div class="col-6" style="color: grey;">
+            <p><i>Don't have an account?</i></p>
+        </div>
+        <div class="col-6">
+            <button style="background-color: #38B4BC;" onclick="location.href = '{% url 'signup' %}';" class="btn float-end"><b>SIGN UP HERE</b></button>
+        </div>
+    </div>
       </div>
 </div>
 
