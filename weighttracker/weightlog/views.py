@@ -32,18 +32,6 @@ def index(request):
 
     return redirect(reverse('chart', kwargs={'pk':7}))
 
-class WeightListView(LoginRequiredMixin, generic.ListView):
-    model = Weight
-    #paginate_by = 10
-
-    def get_queryset(self):
-        return Weight.objects.filter(user=self.request.user)
-
-    def get_context_data(self,**kwargs):
-        context = super(WeightListView, self).get_context_data(**kwargs)
-        context['my_user']=self.request.user
-        return context
-
 class UserProfileUpdate(LoginRequiredMixin, UpdateView):
     model = User
     template_name = "weightlog/edit_profile_form.html"
@@ -118,15 +106,6 @@ class WeightUpdate(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self, *args, **kwargs):
         return Weight.objects.filter(user=self.request.user)
-    
-class WeightDelete(LoginRequiredMixin, DeleteView):
-    model = Weight
-    success_url = reverse_lazy('weights')
-
-    def get_context_data(self,**kwargs):
-        context = super(WeightDelete, self).get_context_data(**kwargs)
-        context['my_user']=self.request.user
-        return context
 
 class lineChart(LoginRequiredMixin, generic.View):
     permission_classes = [IsAuthenticated]

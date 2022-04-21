@@ -4,7 +4,6 @@ from weightlog import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('weights/', views.WeightListView.as_view(), name='weights'),
     path('edit/profile/<int:pk>', views.UserProfileUpdate.as_view(), name='edit-profile'),
 ]
 
@@ -12,7 +11,6 @@ urlpatterns = [
 urlpatterns += [
     path('weight/create/', views.WeightCreate.as_view(), name='weight-create'),
     path('weight/<int:pk>/update/', views.WeightUpdate.as_view(), name='weight-update'),
-    path('weight/<int:pk>/delete/', views.WeightDelete.as_view(), name='weight-delete'),
 ]
 
 # urls for charts
