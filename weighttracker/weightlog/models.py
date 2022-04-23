@@ -16,4 +16,4 @@ class Weight(models.Model):
 
     def __str__(self):
         """Represent weight object as a date"""
-        return self.date
+        return self.date.strftime('%b %d, %Y')
